@@ -74,7 +74,7 @@ def get_machine_status(machine_id: int,db: Session = Depends(get_db)):
         }
     
 @app.put("/task/update_status")
-def update_task_status(operator_id: str = Body(...), task_id: int = Body(...), db: Session = Depends(get_db)):
+def update_task_status(operator_id: str = Body(...), task_id: str = Body(...), db: Session = Depends(get_db)):
     task = db.query(models.TaskDetails).filter(
         models.TaskDetails.operator_id == operator_id,
         models.TaskDetails.task_id == task_id
@@ -100,5 +100,27 @@ def update_task_status(operator_id: str = Body(...), task_id: int = Body(...), d
         "message": "Task status updated successfully"
     }
 
+app.mount("/music", StaticFiles(directory="music"), name="music")
 
-   
+songs = [
+{
+    "title": "Song One",
+    "artist": "Artist A",
+    "url": "http://localhost:8000/music/song1.mp3"
+},
+{
+    "title": "Song Two",
+    "artist": "Artist B",
+    "url": "http://localhost:8000/music/song2.mp3"
+},
+{
+    "title": "Song Three",
+    "artist": "Artist C",
+    "url": "http://localhost:8000/music/song3.mp3"
+}
+]
+
+@app.get("/songs")
+def get_song_list():
+return songs
+
